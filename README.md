@@ -1,7 +1,5 @@
 FARM PRODUCE INVENTORY AND SALES SYSTEM
 
-This is a Group 8 object-oriented programming project.
-
 The system manages farm produce, customers, stock and sales.
 
 RUNNING THE PROGRAM
