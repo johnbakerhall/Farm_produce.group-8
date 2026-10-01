@@ -59,7 +59,7 @@ class Produce(ABC):
         if stock > 0:
             self.increase_stock(stock)
 
-    # ---------- encapsulated price ----------
+    #  encapsulated price 
     @property
     def price_per_unit(self):
         """Read the price (outside code cannot skip validation)."""
@@ -72,7 +72,7 @@ class Produce(ABC):
             raise ValueError("Price must be a number greater than 0.")
         self._price_per_unit = value
 
-    # ---------- encapsulated stock (read-only property) ----------
+    #  encapsulated stock (read-only property) 
     @property
     def stock(self):
         """Stock can be READ here, but only changed by the methods below."""
@@ -95,7 +95,7 @@ class Produce(ABC):
             )
         self._stock -= quantity
 
-    # ---------- abstract parts: every subclass MUST implement these ----------
+    #  abstract parts: every subclass MUST implement these 
     @property
     @abstractmethod
     def unit(self):
