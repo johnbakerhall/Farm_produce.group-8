@@ -227,10 +227,9 @@ class Customer:
 
     @phone.setter
     def phone(self, value):
-        if value is None:
-            raise ValueError("Phone must contain 9 to 13 digits (e.g. 0772123456).")
-        text = str(value).strip()
-        digits = text.replace("+", "")
+        text = value.strip()
+        digits = text[1:] if text.startwwith ("+") else text
+        
         if not digits.isdigit() or not (9 <= len(digits) <= 13):
             raise ValueError("Phone must contain 9 to 13 digits (e.g. 0772123456).")
         self._phone = text
