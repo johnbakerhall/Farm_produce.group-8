@@ -188,9 +188,9 @@ class PoultryProduce(Produce):
         return "Per piece (whole numbers only). 5% discount for 10 pieces or more."
 
 
-# ======================================================================
+
 # 2. CUSTOMER  (encapsulation with validation)
-# ======================================================================
+
 class Customer:
     """A registered customer. Keeps a private list of their purchases."""
 
