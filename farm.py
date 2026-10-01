@@ -1,6 +1,6 @@
 """
 GROUP 8: Farm Produce Inventory and Sales System
-=================================================
+
 A console program for a farm / agricultural cooperative.
 
 Main ideas used (each is marked in the code with a  >>> tag):
@@ -18,17 +18,17 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 
 
-# ======================================================================
+
 # CUSTOM ERROR  (gives clear messages for invalid operations)
-# ======================================================================
+
 class InsufficientStockError(Exception):
     """Raised when a customer wants more produce than we have."""
     pass
 
 
-# ======================================================================
+
 # 1. PRODUCE CLASSES  (abstraction + inheritance + polymorphism)
-# ======================================================================
+
 class Produce(ABC):
     """
     >>> ABSTRACTION
