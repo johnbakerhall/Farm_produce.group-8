@@ -229,8 +229,7 @@ class Customer:
     def phone(self, value):
         text = value.strip()
         digits = text[1:] if text.startwwith ("+") else text
-        
-        if not digits.isdigit() or not (9 <= len(digits) <= 13):
+         if not digits.isdigit() or not (9 <= len(digits) <= 13):
             raise ValueError("Phone must contain 9 to 13 digits (e.g. 0772123456).")
         self._phone = text
 
