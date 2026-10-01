@@ -692,9 +692,9 @@ class FarmMenu:
                 print(f"  ! Operation failed: {error}")
 
 
-# ======================================================================
+
 # PROGRAM START
-# ======================================================================
+
 if __name__ == "__main__":
     FarmMenu(FarmSystem()).run()
 from main import run_menu
