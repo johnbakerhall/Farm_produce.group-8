@@ -13,7 +13,7 @@ Main ideas used (each is marked in the code with a  >>> tag):
 
 Currency used: UGX (Uganda Shillings)
 """
-
+import math
 from abc import ABC, abstractmethod
 from datetime import datetime
 
