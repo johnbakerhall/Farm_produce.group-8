@@ -697,8 +697,3 @@ class FarmMenu:
 
 if __name__ == "__main__":
     FarmMenu(FarmSystem()).run()
-'''from main import run_menu
-
-
-if __name__ == "__main__":
-    run_menu()'''
