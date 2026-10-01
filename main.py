@@ -4,9 +4,10 @@ main.py - Menu-driven interface for the Farm Produce Inventory and Sales System.
 This file only handles user input and output. The actual data and rules
 (customers, produce, stock, sales) live in models.py and system.py.
 """
-
+# Classes for the things we store: customers and the three kinds of produce
 from models import Customer, CropProduce, DairyProduce, PoultryProduce
-from system import FarmSystem
+# FarmSystem holds all the data and business logic
+from system import FarmSystem 
 
 
 def read_number(message):
