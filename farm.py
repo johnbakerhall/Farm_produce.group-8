@@ -1,6 +1,6 @@
 """
 GROUP 8: Farm Produce Inventory and Sales System
-=================================================
+
 A console program for a farm / agricultural cooperative.
 
 Main ideas used (each is marked in the code with a  >>> tag):
@@ -18,17 +18,17 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 
 
-# ======================================================================
+
 # CUSTOM ERROR  (gives clear messages for invalid operations)
-# ======================================================================
+
 class InsufficientStockError(Exception):
     """Raised when a customer wants more produce than we have."""
     pass
 
 
-# ======================================================================
+
 # 1. PRODUCE CLASSES  (abstraction + inheritance + polymorphism)
-# ======================================================================
+
 class Produce(ABC):
     """
     >>> ABSTRACTION
@@ -188,9 +188,9 @@ class PoultryProduce(Produce):
         return "Per piece (whole numbers only). 5% discount for 10 pieces or more."
 
 
-# ======================================================================
+
 # 2. CUSTOMER  (encapsulation with validation)
-# ======================================================================
+
 class Customer:
     """A registered customer. Keeps a private list of their purchases."""
 
@@ -241,9 +241,9 @@ class Customer:
         return f"[{self.customer_id}] {self._name} ({self._phone})"
 
 
-# ======================================================================
+
 # 3. SALE  (a record of one transaction)
-# ======================================================================
+
 class Sale:
     """
     One sale record.
@@ -267,9 +267,9 @@ class Sale:
                 f"Total: {self.total_price:,.0f} UGX")
 
 
-# ======================================================================
+
 # 4. INVENTORY  (holds all produce)
-# ======================================================================
+
 class Inventory:
     """
     >>> AGGREGATION: Inventory HOLDS Produce objects, but a Produce object
@@ -303,9 +303,9 @@ class Inventory:
         return sum(p.stock * p.price_per_unit for p in self._items.values())
 
 
-# ======================================================================
+
 # 5. SALES LEDGER  (holds all sales)
-# ======================================================================
+
 class SalesLedger:
     """
     >>> COMPOSITION: the ledger OWNS its Sale records. Sales are created
@@ -333,9 +333,9 @@ class SalesLedger:
         return result
 
 
-# ======================================================================
+
 # 6. FARM SYSTEM  (the coordinator: objects collaborate here)
-# ======================================================================
+
 class FarmSystem:
     """
     Brings the objects together. All business logic lives here,
@@ -433,9 +433,9 @@ class FarmSystem:
         return "\n".join(lines)
 
 
-# ======================================================================
+
 # 7. MENU  (only talks to the user, then calls FarmSystem)
-# ======================================================================
+
 class FarmMenu:
     """Console menu. It asks questions and shows answers; nothing more."""
 
@@ -692,9 +692,9 @@ class FarmMenu:
                 print(f"  ! Operation failed: {error}")
 
 
-# ======================================================================
+
 # PROGRAM START
-# ======================================================================
+
 if __name__ == "__main__":
     FarmMenu(FarmSystem()).run()
 from main import run_menu
