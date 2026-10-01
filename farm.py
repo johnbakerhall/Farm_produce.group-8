@@ -303,9 +303,9 @@ class Inventory:
         return sum(p.stock * p.price_per_unit for p in self._items.values())
 
 
-# ======================================================================
+
 # 5. SALES LEDGER  (holds all sales)
-# ======================================================================
+
 class SalesLedger:
     """
     >>> COMPOSITION: the ledger OWNS its Sale records. Sales are created
@@ -333,9 +333,9 @@ class SalesLedger:
         return result
 
 
-# ======================================================================
+
 # 6. FARM SYSTEM  (the coordinator: objects collaborate here)
-# ======================================================================
+
 class FarmSystem:
     """
     Brings the objects together. All business logic lives here,
@@ -433,9 +433,9 @@ class FarmSystem:
         return "\n".join(lines)
 
 
-# ======================================================================
+
 # 7. MENU  (only talks to the user, then calls FarmSystem)
-# ======================================================================
+
 class FarmMenu:
     """Console menu. It asks questions and shows answers; nothing more."""
 
