@@ -1,3 +1,10 @@
+"""
+main.py - Menu-driven interface for the Farm Produce Inventory and Sales System.
+
+This file only handles user input and output. The actual data and rules
+(customers, produce, stock, sales) live in models.py and system.py.
+"""
+
 from models import Customer, CropProduce, DairyProduce, PoultryProduce
 from system import FarmSystem
 
