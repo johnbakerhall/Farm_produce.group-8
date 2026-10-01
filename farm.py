@@ -18,6 +18,10 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 
 
+def is_valid_positive_number(value):
+    """Return True only for finite positive numbers. Reject bools, NaN, inf, and <= 0."""
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and value > 0
+
 
 # CUSTOM ERROR  (gives clear messages for invalid operations)
 
@@ -67,8 +71,8 @@ class Produce(ABC):
 
     @price_per_unit.setter
     def price_per_unit(self, value):
-        """Change the price, but only if it is a positive number."""
-        if not isinstance(value, (int, float)) or value <= 0:
+        """Change the price, but only if it is a positive finite number."""
+        if not is_valid_positive_number(value):
             raise ValueError("Price must be a number greater than 0.")
         self._price_per_unit = value
 
@@ -80,13 +84,13 @@ class Produce(ABC):
 
     def increase_stock(self, quantity):
         """Add newly received produce to stock."""
-        if quantity <= 0:
+        if not is_valid_positive_number(quantity):
             raise ValueError("Quantity to add must be greater than 0.")
         self._stock += quantity
 
     def reduce_stock(self, quantity):
         """Remove sold produce from stock. Refuses to go below zero."""
-        if quantity <= 0:
+        if not is_valid_positive_number(quantity):
             raise ValueError("Quantity to sell must be greater than 0.")
         if quantity > self._stock:
             raise InsufficientStockError(
@@ -213,9 +217,9 @@ class Customer:
 
     @name.setter
     def name(self, value):
-        if not value or not value.strip():
+        if value is None or not str(value).strip():
             raise ValueError("Customer name cannot be empty.")
-        self._name = value.strip()
+        self._name = str(value).strip()
 
     @property
     def phone(self):
@@ -223,10 +227,13 @@ class Customer:
 
     @phone.setter
     def phone(self, value):
-        digits = value.replace("+", "").strip()
+        if value is None:
+            raise ValueError("Phone must contain 9 to 13 digits (e.g. 0772123456).")
+        text = str(value).strip()
+        digits = text.replace("+", "")
         if not digits.isdigit() or not (9 <= len(digits) <= 13):
             raise ValueError("Phone must contain 9 to 13 digits (e.g. 0772123456).")
-        self._phone = value.strip()
+        self._phone = text
 
     @property
     def purchases(self):
@@ -386,7 +393,7 @@ class FarmSystem:
         customer = self.get_customer(customer_id)
         produce = self.inventory.get(produce_id)
 
-        if quantity <= 0:
+        if not isinstance(quantity, (int, float)) or isinstance(quantity, bool) or not math.isfinite(quantity) or quantity <= 0:
             raise ValueError("Quantity must be greater than 0.")
         if quantity > produce.stock:
             raise InsufficientStockError(
@@ -444,10 +451,13 @@ class FarmMenu:
 
     # ---------- small input helpers ----------
     def ask_number(self, prompt):
-        """Keep asking until the user types a valid number."""
+        """Keep asking until the user types a valid finite number."""
         while True:
             try:
-                return float(input(prompt))
+                value = float(input(prompt))
+                if not math.isfinite(value):
+                    raise ValueError
+                return value
             except ValueError:
                 print("  ! Please enter a valid number.")
 
