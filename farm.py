@@ -19,7 +19,7 @@ from datetime import datetime
 
 
 def is_valid_positive_number(value):
-    """Return True only for finite positive numbers. Reject bools, NaN, inf, and <= 0."""
+    """Return True only for finite positive numbers and Reject bools, NaN, inf, and <= 0."""
     return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and value > 0
 
 
