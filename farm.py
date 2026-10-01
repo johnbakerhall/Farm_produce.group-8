@@ -241,9 +241,9 @@ class Customer:
         return f"[{self.customer_id}] {self._name} ({self._phone})"
 
 
-# ======================================================================
+
 # 3. SALE  (a record of one transaction)
-# ======================================================================
+
 class Sale:
     """
     One sale record.
@@ -267,9 +267,9 @@ class Sale:
                 f"Total: {self.total_price:,.0f} UGX")
 
 
-# ======================================================================
+
 # 4. INVENTORY  (holds all produce)
-# ======================================================================
+
 class Inventory:
     """
     >>> AGGREGATION: Inventory HOLDS Produce objects, but a Produce object
