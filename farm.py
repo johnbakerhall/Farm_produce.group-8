@@ -1,7 +1,7 @@
 """
 GROUP 8: Farm Produce Inventory and Sales System
 
-A console program for a farm / agricultural cooperative.
+A console program for a farm / agricultural cooperative
 
 Main ideas used (each is marked in the code with a  >>> tag):
     >>> ABSTRACTION     : Produce is an abstract class with abstract methods
@@ -19,14 +19,14 @@ from datetime import datetime
 
 
 def is_valid_positive_number(value):
-    """Return True only for finite positive numbers. Reject bools, NaN, inf, and <= 0."""
+    """Return True only for finite positive numbers and Reject bools, NaN, inf, and <= 0."""
     return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and value > 0
 
 
 # CUSTOM ERROR  (gives clear messages for invalid operations)
 
 class InsufficientStockError(Exception):
-    """Raised when a customer wants more produce than we have."""
+    """Raised when a customer wants more produce than we have"""
     pass
 
 
@@ -189,7 +189,13 @@ class PoultryProduce(Produce):
         return round(total)
 
     def pricing_rule(self):
-        return "Per piece (whole numbers only). 5% discount for 10 pieces or more."
+        return "Per piece (whole numbers only). 5% discount for 10 pieces or  even more."
+        
+    def increase_stock(self, quantity):
+        # Poultry stock must be whole pieces
+        if quantity != int(quantity):
+            raise ValueError("Poultry stock must be in whole pieces.")
+        super().increase_stock(quantity)
 
 
 
@@ -225,15 +231,15 @@ class Customer:
     def phone(self):
         return self._phone
 
-    @phone.setter
+     @phone.setter
     def phone(self, value):
-        if value is None:
-            raise ValueError("Phone must contain 9 to 13 digits (e.g. 0772123456).")
-        text = str(value).strip()
-        digits = text.replace("+", "")
+        text = value.strip()
+        # Remove the plus sign before checking the digits
+        digits = text[1:] if text.startswith("+") else text
         if not digits.isdigit() or not (9 <= len(digits) <= 13):
             raise ValueError("Phone must contain 9 to 13 digits (e.g. 0772123456).")
         self._phone = text
+
 
     @property
     def purchases(self):
@@ -547,6 +553,128 @@ class FarmMenu:
             print("   (no purchases yet)")
         for sale in customer.purchases:
             print("   " + str(sale))
+
+    # ---------- guided demo: EVERY value is typed by the user ----------
+    def retry_until_valid(self, step):
+        """
+        Runs step() again and again until it works.
+        Every failure prints a REJECTED message, which shows validation live.
+        """
+        while True:
+            try:
+                return step()
+            except (ValueError, KeyError, InsufficientStockError) as error:
+                print(f"  REJECTED: {error}  -> please try again.")
+
+    def demo_heading(self, text):
+        print("\n" + "-" * 60)
+        print(text)
+        print("-" * 60)
+
+    def demo_add_produce(self, produce_class, label):
+        """Ask for one produce item of the given category and add it."""
+        def step():
+            name = input(f"  {label} name: ")
+            price = self.ask_number("  Price per unit (UGX): ")
+            stock = self.ask_number("  Starting stock: ")
+            produce = produce_class(name, price, stock)   # validation happens here
+            self.system.add_produce(produce)
+            return produce
+        produce = self.retry_until_valid(step)
+        print(f"  Added: {produce}")
+        print(f"  Pricing rule: {produce.pricing_rule()}")
+        return produce
+
+    def run_demo(self):
+        """Guided demo. The program explains each step and the user types the data."""
+        print("\nGUIDED DEMO - type your own data at each step.")
+
+        # Step 1: register a customer (try a bad phone number to see validation)
+        self.demo_heading("STEP 1: Register a customer")
+        customer = self.retry_until_valid(lambda: self.system.register_customer(
+            input("  Customer name: "), input("  Phone number: ")))
+        print(f"  Registered: {customer}")
+
+        # Step 2: one produce item from each subclass
+        self.demo_heading("STEP 2: Add one produce item from each category")
+        print("  Crop (sold per kg)")
+        crop = self.demo_add_produce(CropProduce, "Crop")
+        print("  Dairy (sold per litre)")
+        dairy = self.demo_add_produce(DairyProduce, "Dairy")
+        print("  Poultry (sold per piece)")
+        poultry = self.demo_add_produce(PoultryProduce, "Poultry")
+        items = [crop, dairy, poultry]
+
+        # Step 3: polymorphism
+        self.demo_heading("STEP 3: Polymorphism - same method, different prices")
+        quantity = self.ask_number("  Enter a quantity to compare (e.g. 20, try 60 too): ")
+        for item in items:
+            try:
+                price = item.calculate_price(quantity)
+                print(f"  {item.category:<8} {item.name:<10} calculate_price({self.tidy(quantity)}) = {price:,} UGX")
+            except ValueError as error:
+                print(f"  {item.category:<8} {item.name:<10} -> {error}")
+
+        # Step 4: a valid sale
+        self.demo_heading("STEP 4: Record a sale")
+        for item in items:
+            print("  " + str(item))
+
+        def sale_step():
+            produce_id = self.ask_whole_number("  Produce ID to buy: ")
+            qty = self.tidy(self.ask_number("  Quantity: "))
+            return self.system.record_sale(customer.customer_id, produce_id, qty)
+        sale = self.retry_until_valid(sale_step)
+        print(f"  SUCCESS -> {sale}")
+
+        # Step 5: rejected sale (more than the stock)
+        self.demo_heading("STEP 5: Try to buy MORE than the available stock")
+        for item in items:
+            print("  " + str(item))
+        print("  Enter a quantity bigger than the stock shown above.")
+        while True:
+            try:
+                produce_id = self.ask_whole_number("  Produce ID: ")
+                qty = self.tidy(self.ask_number("  Quantity: "))
+                sale = self.system.record_sale(customer.customer_id, produce_id, qty)
+                print(f"  That was within stock, so it was accepted: {sale}")
+                print("  Try again with a bigger quantity.")
+            except InsufficientStockError as error:
+                print(f"  REJECTED: {error}")
+                break
+            except (ValueError, KeyError) as error:
+                print(f"  REJECTED: {error}  -> please try again.")
+
+        # Step 6: rejected price (encapsulation)
+        self.demo_heading("STEP 6: Try to set an INVALID price (encapsulation)")
+        print("  Enter 0 or a negative number as the new price.")
+        while True:
+            try:
+                produce = self.system.inventory.get(self.ask_whole_number("  Produce ID: "))
+                produce.price_per_unit = self.ask_number("  New price per unit: ")
+                print(f"  That price was valid and accepted: {produce}")
+                print("  Try again with 0 or a negative number.")
+            except (ValueError, KeyError) as error:
+                print(f"  REJECTED: {error}")
+                break
+
+        # Step 7: receive new stock
+        self.demo_heading("STEP 7: Receive new stock")
+
+        def stock_step():
+            produce_id = self.ask_whole_number("  Produce ID: ")
+            qty = self.ask_number("  Quantity received: ")
+            self.system.receive_stock(produce_id, qty)
+            return self.system.inventory.get(produce_id)
+        print(f"  Stock updated: {self.retry_until_valid(stock_step)}")
+
+        # Step 8: history and summary
+        self.demo_heading("STEP 8: Customer history and summary")
+        print(f"  Purchases by {customer.name}:")
+        for past_sale in customer.purchases:
+            print("   " + str(past_sale))
+        print(self.system.summary_text())
+        print("Demo finished. You can keep using the menu.")
 
     # ---------- main loop ----------
     def run(self):
