@@ -192,9 +192,10 @@ class PoultryProduce(Produce):
         return "Per piece (whole numbers only). 5% discount for 10 pieces or more."
         
     def increase_stock(self, quantity):
-    if quantity != int(quantity):
-        raise ValueError("Poultry stock must be in whole pieces.")
-    super().increase_stock(quantity)
+        # Poultry stock must be whole pieces
+        if quantity != int(quantity):
+            raise ValueError("Poultry stock must be in whole pieces.")
+        super().increase_stock(quantity)
 
 
 
