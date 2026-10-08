@@ -189,7 +189,7 @@ class PoultryProduce(Produce):
         return round(total)
 
     def pricing_rule(self):
-        return "Per piece (whole numbers only). 5% discount for 10 pieces or more."
+        return "Per piece (whole numbers only). 5% discount for 10 pieces or  even more."
         
     def increase_stock(self, quantity):
         # Poultry stock must be whole pieces
