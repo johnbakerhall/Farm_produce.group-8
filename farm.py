@@ -26,7 +26,7 @@ def is_valid_positive_number(value):
 # CUSTOM ERROR  (gives clear messages for invalid operations)
 
 class InsufficientStockError(Exception):
-    """Raised when a customer wants more produce than we have."""
+    """Raised when a customer wants more produce than we have"""
     pass
 
 
