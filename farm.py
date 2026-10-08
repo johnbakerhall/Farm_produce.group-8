@@ -1,7 +1,7 @@
 """
 GROUP 8: Farm Produce Inventory and Sales System
 
-A console program for a farm / agricultural cooperative.
+A console program for a farm / agricultural cooperative
 
 Main ideas used (each is marked in the code with a  >>> tag):
     >>> ABSTRACTION     : Produce is an abstract class with abstract methods
