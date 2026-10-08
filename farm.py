@@ -8,8 +8,7 @@ Main ideas used (each is marked in the code with a  >>> tag):
     >>> INHERITANCE     : CropProduce, DairyProduce, PoultryProduce extend Produce
     >>> POLYMORPHISM    : calculate_price() behaves differently in each subclass
     >>> ENCAPSULATION   : private/protected attributes + @property validation
-    >>> RELATIONSHIPS   : association, aggregation, composition, dependency
-    >>> COLLABORATION   : FarmSystem coordinates objects; the menu has no logic
+ 
 
 Currency used: UGX (Uganda Shillings)
 """
