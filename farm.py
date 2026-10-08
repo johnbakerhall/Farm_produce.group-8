@@ -590,7 +590,7 @@ class FarmMenu:
         """Guided demo. The program explains each step and the user types the data."""
         print("\nGUIDED DEMO - type your own data at each step.")
 
-        # Step 1: register a customer (try a bad phone number to see validation)
+        # Step 1: register a customer (try a wrong phone number to see validation)
         self.demo_heading("STEP 1: Register a customer")
         customer = self.retry_until_valid(lambda: self.system.register_customer(
             input("  Customer name: "), input("  Phone number: ")))
