@@ -231,7 +231,7 @@ class Customer:
     def phone(self):
         return self._phone
 
-     @phone.setter
+    @phone.setter
     def phone(self, value):
         text = value.strip()
         # Remove the plus sign before checking the digits
